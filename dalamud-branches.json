@@ -1,0 +1,38 @@
+{
+  "release": {
+    "version": "14.0.5.1",
+    "runtimeVersion": "10.0.0",
+    "downloadUrl": "https://kamori.goats.dev/File/Get/6a9f9aee19af4280f2d61680bbff960ae48e5dcaad70707baad857da2f9d8e48",
+    "docker": {
+      "dotnetSdkVersion": "sdk:10.0"
+    },
+    "nix": {
+      "hash": "sha256-IV+tgv6j0Q7QDQuweTW+pfOwD9dmzFJGtvBlr6sq7XI=",
+      "dotnetSdkVersion": "sdk_10_0"
+    }
+  },
+  "api15": {
+    "version": "14.0.5.0-74-gd6db92634",
+    "runtimeVersion": "10.0.0",
+    "downloadUrl": "https://kamori.goats.dev/File/Get/c46d5895c0999fe7b5e9f309bbe7db50a3d00594a087470616e618bdbff5c59e",
+    "docker": {
+      "dotnetSdkVersion": "sdk:10.0"
+    },
+    "nix": {
+      "hash": "sha256-Izxh70fbGxfFn7C9J6osaBfYS5kUAu0K7m6OUIHDp0c=",
+      "dotnetSdkVersion": "sdk_10_0"
+    }
+  },
+  "stg": {
+    "version": "14.0.5.1-2-g5030f6885",
+    "runtimeVersion": "10.0.0",
+    "downloadUrl": "https://kamori.goats.dev/File/Get/be2353474674c651cf1eccae88d200da7c10896a563c5ea6bbb892c1c20092ef",
+    "docker": {
+      "dotnetSdkVersion": "sdk:10.0"
+    },
+    "nix": {
+      "hash": "sha256-vF4dJfrfIsYtALCtgD8AmWiSfgS+x9l8LVj33wxslp8=",
+      "dotnetSdkVersion": "sdk_10_0"
+    }
+  }
+}
