@@ -30,7 +30,7 @@ FROM ghcr.io/blooym/dalamud-packages:<dalamud-branch>
 Add the flake as an input:
 
 ```nix
-inputs.dalamud-packages.url = "github:Blooym/dalamud-packages";
+inputs.dalamud.url = "github:Blooym/dalamud-packages";
 ```
 
 Then use it in your dev shell, or elsewhere, replacing `<branch>` with your desired branch:
@@ -38,8 +38,8 @@ Then use it in your dev shell, or elsewhere, replacing `<branch>` with your desi
 ```nix
 pkgs.mkShell {
   packages = [
-    inputs.dalamud-packages.packages.${system}.<branch>.sdk # Linked dotnet sdk
+    inputs.dalamud.packages.${system}.<branch>.sdk # Linked dotnet sdk
   ];
-  env.DALAMUD_HOME = inputs.dalamud-packages.packages.${system}.<branch>; # Dalamud files
+  env.DALAMUD_HOME = inputs.dalamud.packages.${system}.<branch>; # Dalamud files
 };
 ```
