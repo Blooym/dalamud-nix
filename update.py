@@ -13,12 +13,6 @@ def runtime_ver_to_nix_sdk(runtime_version):
     return f"sdk_{major}_{minor}"
 
 
-def runtime_ver_to_docker_img(runtime_version):
-    parts = runtime_version.split(".")
-    major, minor = parts[0], parts[1]
-    return f"sdk:{major}.{minor}"
-
-
 def generate_branch(branch, info):
     downloadUrl = info["downloadUrl"]
     version = info["assemblyVersion"]
@@ -45,7 +39,6 @@ def generate_branch(branch, info):
         "version": version,
         "runtimeVersion": runtimeVersion,
         "downloadUrl": downloadUrl,
-        "docker": {"dotnetSdkVersion": runtime_ver_to_docker_img(runtimeVersion)},
         "nix": {
             "hash": json.loads(result)["hash"],
             "dotnetSdkVersion": runtime_ver_to_nix_sdk(runtimeVersion),

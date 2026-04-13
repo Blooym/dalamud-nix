@@ -1,6 +1,6 @@
 # Dalamud Packages
 
-Dalamud packages for Nix and Docker 
+Dalamud packaged as a Nix flake.
 
 ## Usage
 
@@ -17,20 +17,15 @@ If you are using `Dalamud.Net.Sdk` the following is already done for you. Otherw
 </PropertyGroup>
 ```
 
-## OCI Image
-
-To use the image, simply add the following to your container file:
-
-```
-FROM ghcr.io/blooym/dalamud-packages:<dalamud-branch>
-```
-
 ## Nix Flake
 
 Add the flake as an input:
 
 ```nix
-inputs.dalamud.url = "github:Blooym/dalamud-packages";
+inputs.dalamud = { 
+  url = "github:Blooym/dalamud-flake";
+  # inputs.nixpkgs.follows = "nixpkgs"; # follow your local nixpkgs instead.
+};
 ```
 
 Then use it in your dev shell, or elsewhere, replacing `<branch>` with your desired branch:
