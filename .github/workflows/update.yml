@@ -6,6 +6,7 @@ on:
     branches: ["main"]
     paths:
       - "update.py"
+      - ".github/workflows/update.yml"
   schedule:
     - cron: '0 0 * * *'
 
@@ -17,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: DeterminateSystems/nix-installer-action@v22
+      - uses: cachix/install-nix-action@v31
 
       - name: Update flake
         run: nix flake update
