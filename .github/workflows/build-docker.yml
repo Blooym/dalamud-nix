@@ -1,0 +1,62 @@
+name: Build Docker Images
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - "dalamud-branches.json"
+      
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      branches: ${{ steps.branches.outputs.branches }}
+      image: ${{ steps.image.outputs.image }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Read branches
+        id: branches
+        run: |
+          echo "branches=$(jq -c '[to_entries[] | {
+            branch: .key,
+            url: .value.downloadUrl,
+            sdk: .value.docker.dotnetSdkVersion,
+          }]' dalamud-branches.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Image Name
+        id: image
+        run: |
+          echo "image=ghcr.io/${OWNER,,}/${REPO,,}" >> "$GITHUB_OUTPUT"
+        env:
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+
+  build:
+    needs: matrix
+    name: Build ${{ matrix.branch }}
+    strategy:
+      matrix:
+        include: ${{ fromJson(needs.matrix.outputs.branches) }}
+    uses: docker/github-builder/.github/workflows/build.yml@v1
+    with:
+      output: image
+      platforms: linux/amd64,linux/arm64
+      meta-images: ${{ needs.matrix.outputs.image }}
+      push: true
+      sign: false
+      build-args: |
+        DALAMUD_URL=${{ matrix.url }}
+        DOTNET_SDK=${{ matrix.sdk }}
+      meta-tags: |
+        type=raw,value=${{ matrix.branch }}
+    secrets:
+      registry-auths: |
+        - registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}

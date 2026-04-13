@@ -1,0 +1,5 @@
+.ruff_cache/
+.direnv/
+
+result
+result-man

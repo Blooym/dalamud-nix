@@ -1,0 +1,45 @@
+name: Update Branches
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - "update.py"
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  update-branches:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+
+      - uses: DeterminateSystems/nix-installer-action@v22
+
+      - name: Update flake
+        run: nix flake update
+
+      - name: Update dalamud-branches.json
+        run: python3 ./update.py
+
+      - name: Commit and push changes
+        run: |
+          changed=false
+          if ! git diff --quiet dalamud-branches.json; then
+            git add dalamud-branches.json
+            git commit -m "chore: update dalamud-branches.json"
+            changed=true
+          fi
+          if ! git diff --quiet flake.lock; then
+            git add flake.lock
+            git commit -m "chore: update flake.lock"
+            changed=true
+          fi
+          if [ "$changed" = true ]; then
+            git push
+          fi
