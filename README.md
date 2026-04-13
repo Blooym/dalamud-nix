@@ -23,7 +23,7 @@ Add the flake as an input:
 
 ```nix
 inputs.dalamud = { 
-  url = "github:Blooym/dalamud-flake";
+  url = "github:Blooym/dalamud-nix";
   # inputs.nixpkgs.follows = "nixpkgs"; # follow your local nixpkgs instead.
 };
 ```
