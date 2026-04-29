@@ -11,16 +11,27 @@ BRANCH_FILE = "dalamud-branches.json"
 def runtime_ver_to_nix_sdk(runtime_version):
     parts = runtime_version.split(".")
     major, minor = parts[0], parts[1]
+    if not (major.isdigit() and minor.isdigit()):
+        raise ValueError(f"Unsupported .NET runtime version format: {runtime_version}")
     return f"sdk_{major}_{minor}"
 
 
 def generate_branch(branch, info):
-    downloadUrl = info["downloadUrl"]
-    version = info["assemblyVersion"]
     runtimeVersion = info["runtimeVersion"]
+    if runtimeVersion is None:
+        print(f"Skipping branch '{branch}' as it does not have a runtime version")
+        return None
+    downloadUrl = info["downloadUrl"]
+    if downloadUrl is None:
+        print(f"Skipping branch '{branch}' as it does not have a download url")
+        return None
+    version = info["assemblyVersion"]
+    if version is None:
+        print(f"Skipping branch '{branch}' as it does not have a version number")
+        return None
 
     print(
-        f"Generating branch info for {branch} (v{version}) with runtime {runtimeVersion}"
+        f"Processing branch '{branch}' (version {version}, runtime {runtimeVersion})"
     )
     result = subprocess.check_output(
         [
@@ -36,6 +47,7 @@ def generate_branch(branch, info):
         stderr=subprocess.DEVNULL,
         text=True,
     )
+
     return branch, {
         "version": version,
         "runtimeVersion": runtimeVersion,
@@ -67,7 +79,11 @@ if os.path.exists(BRANCH_FILE):
         pass
 
 # Update local branch data.
-branches = dict(generate_branch(branch, info) for branch, info in meta.items())
+branches = dict(
+    result
+    for branch, info in meta.items()
+    if (result := generate_branch(branch, info)) is not None
+)
 with open(BRANCH_FILE, "w") as f:
     json.dump(
         {
